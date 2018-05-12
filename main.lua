@@ -4,8 +4,16 @@ local bump = require 'lib.bump'
 -- Tween animation library
 local tween = require 'lib.tween'
 
+local map = require 'map'
+
 -- image data
 local imageData = { redSquare = nil }
+
+map.set (2, 4, "red")
+map.set (1, 9, "red")
+map.set (6, 7, "red")
+map.set (3, 6, "red")
+
 
 -- load our image data and put it in our table
 function love.load()
@@ -19,5 +27,13 @@ end
 
 -- every frame, draw the image data at the position listed by the table
 function love.draw()
-  love.graphics.draw(imageData.redSquare, 32, 100)
+  for x=1,10 do
+    for y=1,10 do
+     local tile = map.get(x,y)
+     if tile == "red" then love.graphics.draw(imageData.redSquare, x * 32, y * 32) end
+   end
+ end
+ 
+     
+     
 end
