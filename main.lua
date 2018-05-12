@@ -11,6 +11,16 @@ local function drawBox(box, r,g,b)
   love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
 end
 
+local map = require 'map'
+
+-- image data
+local imageData = { redSquare = nil }
+
+map.set (2, 4, "red")
+map.set (1, 9, "red")
+map.set (6, 7, "red")
+map.set (3, 6, "red")
+
 -- Player Stuff
 local player = {x=50, y=50, w=20, h=20, speed=80}
 
@@ -37,9 +47,11 @@ local function drawPlayer()
 end
 
 -- Main LÖVE functions
-function love.load(arg)
+function love.load()
   world:add(player, player.x, player.y, player.w, player.h)
   world:add(testBox, testBox.x, testBox.y, testBox.w, testBox.h)
+  
+  imageData.redSquare = love.graphics.newImage('asset/img/square_red.png')
 end
 
 
@@ -50,4 +62,12 @@ end
 function love.draw()
   drawPlayer()
   drawBox(testBox, 0, 255, 0)
+
+  love.graphics.setColor(255, 255, 255)
+  for x=1,10 do
+    for y=1,10 do
+     local tile = map.get(x,y)
+     if tile == "red" then love.graphics.draw(imageData.redSquare, x * 32, y * 32) end
+   end
+ end
 end
