@@ -39,7 +39,19 @@ local function renderMap(currentMap)
      end
    end
  end
-
+ 
+ local function switchMap()
+   if currentMap == 'red' then
+     currentMap = 'blue'
+    elseif currentMap == 'blue' then
+      currentMap = 'yellow'
+    elseif currentMap == 'yellow' then
+      currentMap = 'green'
+    elseif currentMap == 'green' then
+      currentMap = 'red'
+    end
+  end
+  
 -- Player Stuff
 local player = {x=50, y=50, w=20, h=20, speed=80}
 
@@ -95,10 +107,13 @@ end
 
 function love.draw()
   drawPlayer()
-  renderMap(currentMap)
-    
-    
-    
-
-   
+  renderMap(currentMap)   
 end
+
+function love.keypressed(key)
+  if key == "space" then
+    switchMap()
+  end
+end
+
+  
