@@ -6,7 +6,7 @@ local mapdata = require 'mapdata'
 local world = bump.newWorld(50)
 
 local currentMap = 'red' 
-local walls = {}
+local currentWalls = {}
 
 -- image data
 local imageData = { redSquare = nil }
@@ -48,7 +48,7 @@ local function renderMap(currentMap)
      if tile == true then 
        local wall = {x= mapx*32, y= mapy*32, w=32, h=32}
        world:add(wall, wall.x, wall.y, wall.w, wall.h)
-       table.insert(walls, wall)
+       table.insert(currentWalls, wall)
     end
    end
  end
@@ -56,11 +56,11 @@ end
 
  
  local function removeMap()
-  for i=1, #walls do
-    local wall = walls[i]
+  for i=1, #currentWalls do
+    local wall = currentWalls[i]
     world:remove(wall)
   end
-  walls = {}
+  currentWalls = {}
  end
    
    local function nextMap(prevMap)
@@ -109,6 +109,13 @@ local function drawPlayer()
   drawBox(player, 0,255,0)
 end
 
+local function isInWall(map, x, y)
+  local playerTileX = math.floor(x / 32)
+  local playerTileY = math.floor(y /32)
+  
+  return mapdata.getTileAt(map, playerTileX, playerTileY)
+end
+
 -- Main LÖVE functions
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
@@ -136,7 +143,11 @@ function love.draw()
 end
 
 function love.keypressed(key)
-  if key == "space" then
+  playerTopLeft = isInWall(nextMap(currentMap), player.x, player.y)
+  playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w), player.y)
+  playerBottomLeft = isInWall(nextMap(currentMap), player.x, (player.y + player.h))
+  playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w), (player.y + player.h))
+  if key == "space" and not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
     switchMap()
   end
 end
