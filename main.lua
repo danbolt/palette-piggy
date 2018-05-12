@@ -110,6 +110,7 @@ local function updatePlayer(dt)
     if collision.other == endbox then 
       player.x = 0
       player.y = 0
+       world:update(player, 0, 0)
     end
     
   end
