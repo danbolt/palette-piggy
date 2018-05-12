@@ -1,6 +1,8 @@
 -- 2D Collision-detection library
 local bump = require 'lib.bump'
 
+local mapdata = require 'mapdata'
+
 local world = bump.newWorld(50)
 
 local function drawBox(box, r,g,b)
@@ -14,10 +16,7 @@ local map = require 'map'
 local imageData = { redSquare = nil }
 
 local function initializeMap()
-  map.set (2, 4, "red")
-  map.set (1, 9, "red")
-  map.set (6, 7, "red")
-  map.set (3, 6, "red")
+  --
 end
 
 -- Player Stuff
@@ -38,7 +37,9 @@ local function updatePlayer(dt)
     dy = -speed * dt
   end
   
-  player.x, player.y = world:move(player, player.x + dx, player.y + dy)
+  deltaX, deltaY = world:move(player, player.x + dx, player.y + dy)
+  player.x = deltaX
+  player.y = deltaY
 end
 
 local function drawPlayer()
@@ -46,15 +47,17 @@ local function drawPlayer()
 end
 
 -- Main LÖVE functions
-function love.load()
+function love.load(arg)
+  if arg[#arg] == "-debug" then require("mobdebug").start() end
+  
   world:add(player, player.x, player.y, player.w, player.h)
   
   initializeMap()
 
-  for mapx=1,10 do
-    for mapy=1,10 do
-     local tile = map.get(mapx,mapy)
-     if tile == "red" then 
+  for mapx=1,(mapdata.getMapWidth("red")) do
+    for mapy=1,mapdata.getMapHeight('red') do
+     local tile = mapdata.getTileAt('red', mapx, mapy)
+     if tile == true then 
        local wall = {x= mapx*32, y= mapy*32, w=32, h=32}
        world:add(wall, wall.x, wall.y, wall.w, wall.h)
     end
@@ -71,4 +74,13 @@ end
 function love.draw()
   drawPlayer()
   map.draw(imageData.redSquare)
+   for mapx=1,mapdata.getMapWidth('red') do
+    for mapy=1,mapdata.getMapHeight('red') do
+     local tile = mapdata.getTileAt('red', mapx, mapy)
+      if tile == true then 
+        love.graphics.draw(imageData.redSquare, mapx * 32, mapy * 32) 
+      end
+     end
+   end
+   
 end
