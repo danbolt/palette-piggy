@@ -5,6 +5,8 @@ local mapdata = require 'mapdata'
 
 local world = bump.newWorld(50)
 
+local endbox = require 'endbox'
+
 local currentMap = 'red' 
 local currentWalls = {}
 
@@ -100,9 +102,18 @@ local function updatePlayer(dt)
     dy = -speed * dt
   end
   
-  deltaX, deltaY = world:move(player, player.x + dx, player.y + dy)
+  deltaX, deltaY, collisions, numberofcollisions = world:move(player, player.x + dx, player.y + dy)
   player.x = deltaX
-  player.y = deltaY
+  player.y = deltaY 
+  for i=1, numberofcollisions do
+    local collision = collisions[i]
+    if collision.other == endbox then 
+      player.x = 0
+      player.y = 0
+    end
+    
+  end
+  
 end
 
 local function drawPlayer()
@@ -121,7 +132,7 @@ function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
   
   world:add(player, player.x, player.y, player.w, player.h)
-  
+  world:add(endbox, endbox.x, endbox.y, endbox.w, endbox.h)
   addWalls()
   
   imageData.redSquare = love.graphics.newImage('asset/img/square_red.png')
@@ -140,6 +151,7 @@ function love.draw()
   love.graphics.setColor(1,1,1)
   renderMap(currentMap)   
   drawPlayer()
+  endbox.draw()
 end
 
 function love.keypressed(key)
