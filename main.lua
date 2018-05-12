@@ -63,23 +63,24 @@ end
   walls = {}
  end
    
+   local function nextMap(prevMap)
+    if prevMap == 'red' then
+     return 'blue'
+    elseif prevMap == 'blue' then
+      return 'yellow'
+    elseif prevMap == 'yellow' then
+      return 'green'
+    elseif prevMap == 'green' then
+      return 'red'
+    end
+  end  
  
  local function switchMap()
    removeMap()
-   if currentMap == 'red' then
-     currentMap = 'blue'
-     addWalls()
-    elseif currentMap == 'blue' then
-      currentMap = 'yellow'
-      addWalls()
-    elseif currentMap == 'yellow' then
-      currentMap = 'green'
-      addWalls()
-    elseif currentMap == 'green' then
-      currentMap = 'red'
-      addWalls()
-    end
+   currentMap = nextMap(currentMap)
+   addWalls()
   end
+ 
   
 -- Player Stuff
 local player = {x=50, y=50, w=20, h=20, speed=80}
@@ -127,8 +128,11 @@ function love.update(dt)
 end
 
 function love.draw()
-  drawPlayer()
+  love.graphics.setColor(0.1,0.1,0.1)
+  renderMap(nextMap(currentMap))
+  love.graphics.setColor(1,1,1)
   renderMap(currentMap)   
+  drawPlayer()
 end
 
 function love.keypressed(key)
