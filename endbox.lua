@@ -1,9 +1,9 @@
 -- End box
-local endBox = {x=750, y=100, w=32, h=32}
+local endBox = {x=768, y=95, w=32, h=32}
 
 local function drawBox(endBox, r,g,b)
   love.graphics.setColor(r,g,b)
-  love.graphics.rectangle("fill", 768, 95, 32, 32)
+  love.graphics.rectangle("fill", endBox.x, endBox.y, endBox.w, endBox.h)
 end
 
 endBox.draw = function()
