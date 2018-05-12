@@ -61,6 +61,12 @@ function myModule.getMapHeight(mapKey)
 end
 
 function myModule.getTileAt(mapKey, x, y)
+  -- If we are outside the bounds of the map, return false
+  if x < 1 or y < 1 or x > myModule.getMapWidth(mapKey) or y > myModule.getMapHeight(mapKey) then
+    return false
+  end
+  
+  
  local map = maps[mapKey]
  
  return map[y][x] == 1
