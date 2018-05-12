@@ -85,7 +85,7 @@ end
  
   
 -- Player Stuff
-local player = {x=(2*32), y=(14*32), w=20, h=20, speed=80}
+local player = {x=(1.2*32), y=(14.2*32), w=20, h=20, speed=80}
 
 local function updatePlayer(dt)
   local speed = player.speed
