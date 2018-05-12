@@ -155,12 +155,14 @@ function love.draw()
 end
 
 function love.keypressed(key)
-  playerTopLeft = isInWall(nextMap(currentMap), player.x, player.y)
-  playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w), player.y)
-  playerBottomLeft = isInWall(nextMap(currentMap), player.x, (player.y + player.h))
-  playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w), (player.y + player.h))
-  if key == "space" and not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
-    switchMap()
+  if key == "space" then
+    playerTopLeft = isInWall(nextMap(currentMap), player.x, player.y)
+    playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w), player.y)
+    playerBottomLeft = isInWall(nextMap(currentMap), player.x, (player.y + player.h))
+    playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w), (player.y + player.h))
+    if not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
+      switchMap()
+    end
   end
 end
 
