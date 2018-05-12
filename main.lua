@@ -108,8 +108,10 @@ local function updatePlayer(dt)
   for i=1, numberofcollisions do
     local collision = collisions[i]
     if collision.other == endbox then 
+      world:remove(player)
       player.x = 0
       player.y = 0
+      world:add(player, player.x, player.y, player.w, player.h)
     end
     
   end
