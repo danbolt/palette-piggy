@@ -3,9 +3,12 @@ local bump = require 'lib.bump'
 
 local world = bump.newWorld(50)
 
+local endbox = require 'endbox'
+
 local function drawBox(box, r,g,b)
   love.graphics.setColor(r,g,b)
   love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
+  
 end
 
 local map = require 'map'
@@ -71,4 +74,5 @@ end
 function love.draw()
   drawPlayer()
   map.draw(imageData.redSquare)
+  endbox.draw() 
 end
