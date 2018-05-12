@@ -6,6 +6,7 @@ local mapdata = require 'mapdata'
 local world = bump.newWorld(50)
 
 local currentMap = 'red' 
+local walls = {}
 
 -- image data
 local imageData = { redSquare = nil }
@@ -40,15 +41,43 @@ local function renderMap(currentMap)
    end
  end
  
+ local function addWalls()
+  for mapx=1,(mapdata.getMapWidth(currentMap)) do
+    for mapy=1,mapdata.getMapHeight(currentMap) do
+     local tile = mapdata.getTileAt(currentMap, mapx, mapy)
+     if tile == true then 
+       local wall = {x= mapx*32, y= mapy*32, w=32, h=32}
+       world:add(wall, wall.x, wall.y, wall.w, wall.h)
+       table.insert(walls, wall)
+    end
+   end
+ end
+end
+
+ 
+ local function removeMap()
+  for i=1, #walls do
+    local wall = walls[i]
+    world:remove(wall)
+  end
+  walls = {}
+ end
+   
+ 
  local function switchMap()
+   removeMap()
    if currentMap == 'red' then
      currentMap = 'blue'
+     addWalls()
     elseif currentMap == 'blue' then
       currentMap = 'yellow'
+      addWalls()
     elseif currentMap == 'yellow' then
       currentMap = 'green'
+      addWalls()
     elseif currentMap == 'green' then
       currentMap = 'red'
+      addWalls()
     end
   end
   
@@ -84,16 +113,8 @@ function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
   
   world:add(player, player.x, player.y, player.w, player.h)
-
-  for mapx=1,(mapdata.getMapWidth(currentMap)) do
-    for mapy=1,mapdata.getMapHeight(currentMap) do
-     local tile = mapdata.getTileAt(currentMap, mapx, mapy)
-     if tile == true then 
-       local wall = {x= mapx*32, y= mapy*32, w=32, h=32}
-       world:add(wall, wall.x, wall.y, wall.w, wall.h)
-    end
-   end
- end
+  
+  addWalls()
   
   imageData.redSquare = love.graphics.newImage('asset/img/square_red.png')
   imageData.blueSquare = love.graphics.newImage('asset/img/square_blue.png')
