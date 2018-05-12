@@ -3,7 +3,7 @@ local bump = require 'lib.bump'
 
 local mapdata = require 'mapdata'
 
-local world = bump.newWorld(50)
+local world = bump.newWorld()
 
 local endbox = require 'endbox'
 
@@ -85,7 +85,7 @@ end
  
   
 -- Player Stuff
-local player = {x=50, y=50, w=20, h=20, speed=80}
+local player = {x=(2*32), y=(14*32), w=20, h=20, speed=80}
 
 local function updatePlayer(dt)
   local speed = player.speed
