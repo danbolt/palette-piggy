@@ -1,23 +1,18 @@
 -- 2D Collision-detection library
 local bump = require 'lib.bump'
-
-local mapdata = require 'mapdata'
-
-local world = bump.newWorld()
+local Camera = require 'lib.Camera'
+require "lib.scene"
 
 local endbox = require 'endbox'
-
+local mapdata = require 'mapdata'
+local player = require 'player'
+local world = bump.newWorld()
 local currentMap = 'red' 
 local currentWalls = {}
+local FIRST_SCENE = "main"
 
 -- image data
 local imageData = { redSquare = nil }
-
-local function drawBox(box, r,g,b)
-  love.graphics.setColor(r,g,b)
-  love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
-  love.graphics.setColor(255, 255, 255)
-end
  
 local function getCurrentColour(currentMap)
   if currentMap == 'red' then
@@ -82,43 +77,6 @@ end
    currentMap = nextMap(currentMap)
    addWalls()
   end
- 
-  
--- Player Stuff
-local player = {x=(2*32), y=(14*32), w=20, h=20, speed=80}
-
-local function updatePlayer(dt)
-  local speed = player.speed
-  
-  local dx, dy = 0, 0
-  if love.keyboard.isDown('right') then
-    dx = speed * dt
-  elseif love.keyboard.isDown('left') then
-    dx = -speed * dt
-  end
-  if love.keyboard.isDown('down') then
-    dy = speed * dt
-  elseif love.keyboard.isDown('up') then
-    dy = -speed * dt
-  end
-  
-  deltaX, deltaY, collisions, numberofcollisions = world:move(player, player.x + dx, player.y + dy)
-  player.x = deltaX
-  player.y = deltaY 
-  for i=1, numberofcollisions do
-    local collision = collisions[i]
-    if collision.other == endbox then 
-      player.x = 0
-      player.y = 0
-    end
-    
-  end
-  
-end
-
-local function drawPlayer()
-  drawBox(player, 0,255,0)
-end
 
 local function isInWall(map, x, y)
   local playerTileX = math.floor(x / 32)
@@ -131,6 +89,12 @@ end
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
   
+  camera = Camera()
+  camera:setDeadzone(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 0)
+  camera:setFollowLerp(0.2)
+  
+  Scene.load(FIRST_SCENE)
+  
   world:add(player, player.x, player.y, player.w, player.h)
   world:add(endbox, endbox.x, endbox.y, endbox.w, endbox.h)
   addWalls()
@@ -142,16 +106,32 @@ function love.load(arg)
 end
 
 function love.update(dt)
-  updatePlayer(dt)
+  local dx, dy = player.updatePlayer(dt) 
+  
+  camera:update(dt)
+  camera:follow(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+  
+  deltaX, deltaY, collisions, numberofcollisions = world:move(player, player.x + dx, player.y + dy)
+  player.x = deltaX
+  player.y = deltaY 
+  for i=1, numberofcollisions do
+    local collision = collisions[i]
+    if collision.other == endbox then 
+      player.x = 0
+      player.y = 0
+    end
+  end
 end
 
 function love.draw()
+  camera:attach()
   love.graphics.setColor(0.1,0.1,0.1)
   renderMap(nextMap(currentMap))
   love.graphics.setColor(1,1,1)
   renderMap(currentMap)   
-  drawPlayer()
+  player.drawPlayer()
   endbox.draw()
+  camera:detach()
 end
 
 function love.keypressed(key)
@@ -162,6 +142,8 @@ function love.keypressed(key)
     playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w), (player.y + player.h))
     if not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
       switchMap()
+    else
+      camera:shake(3.5, 1, 60)
     end
   end
 end
