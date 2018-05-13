@@ -1,15 +1,20 @@
 -- 2D Collision-detection library
 local bump = require 'lib.bump'
 local Camera = require 'lib.Camera'
+local Gamestate = require 'lib.gamestate'
+local endscreen = require 'scenes.endscreen'
 
 local endbox = require 'endbox'
 local mapdata = require 'mapdata'
 local player = require 'player'
-local world = bump.newWorld()
+local world = nil
 local currentMap = 'red' 
 local currentWalls = {}
 
 local levelLogic = {}
+
+local levels = { 'tutorial', 'level1' }
+local currentLevel = 1
 
 -- image data
 local imageData = { redSquare = nil }
@@ -85,8 +90,6 @@ local function isInWall(map, x, y)
 end
 
 function levelLogic:enter()
-  
-    
   imageData.redSquare = love.graphics.newImage('asset/img/square_red.png')
   imageData.blueSquare = love.graphics.newImage('asset/img/square_blue.png')
   imageData.greenSquare = love.graphics.newImage('asset/img/square_green.png')
@@ -96,7 +99,9 @@ function levelLogic:enter()
   camera:setDeadzone(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 0)
   camera:setFollowLerp(0.2)
   
-  mapdata.loadLevel('tutorial')
+  mapdata.loadLevel(levels[currentLevel])
+  
+  world = bump.newWorld()
   
   world:add(player, player.x, player.y, player.w, player.h)
   world:add(endbox, endbox.x, endbox.y, endbox.w, endbox.h)
@@ -104,23 +109,43 @@ function levelLogic:enter()
 
 end
 
-function levelLogic:update(dt)
-  local dx, dy = player.updatePlayer(dt, pressedKeys) 
-    
-    camera:update(dt)
-    camera:follow(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
-    
-    deltaX, deltaY, collisions, numberofcollisions = world:move(player, player.x + dx, player.y + dy)
+local function nextLevel()
+  world:remove(player)
+  removeMap()
+  currentMap = 'red'
+  player.resetPlayer()
+       
+  currentLevel = currentLevel + 1
+  if currentLevel > #levels then
+    Gamestate.switch(endscreen)
+  else
+    Gamestate.switch(levelLogic)
+  end
+end
+      
+
+local function checkCollisions(dx,dy)
+  deltaX, deltaY, collisions, numberofcollisions = world:move(player, player.x + dx, player.y + dy)
     player.x = deltaX
     player.y = deltaY 
     for i=1, numberofcollisions do
       local collision = collisions[i]
       if collision.other == endbox then
-        world:update(player, (2*32), (14*32))
-        player.x = 2*32
-        player.y = 14*32
+        nextLevel()
       end
     end
+  end
+  
+
+function levelLogic:update(dt)
+  local dx, dy = player.updatePlayer(dt) 
+    
+    camera:update(dt)
+    camera:follow(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+    
+    checkCollisions(dx,dy)
+    
+    
 end
 
 function levelLogic:draw()
@@ -146,6 +171,8 @@ function levelLogic:keypressed(key)
       camera:shake(3.5, 1, 60)
     end
   end
+  --if --current level is tutorial then
+  --make text appear
 end
 
 return levelLogic

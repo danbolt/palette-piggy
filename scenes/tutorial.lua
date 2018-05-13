@@ -7,9 +7,9 @@ function tutorial:draw()
 end
 
 function tutorial:keyreleased(key, code)
-    if --player reaches endbox
+   -- if --player reaches endbox
         Gamestate.switch(levels)
-    end
+    --end
 end
 
 return tutorial

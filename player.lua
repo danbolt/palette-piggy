@@ -30,6 +30,11 @@ local function initializePlayer()
     drawBox(player, 0,255,0)
   end
   
+  function player.resetPlayer()
+    player.x=(2*32)
+    player.y=(14*32)
+  end
+  
   return player
 end
 
