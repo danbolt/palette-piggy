@@ -115,9 +115,10 @@ function levelLogic:update(dt)
     player.y = deltaY 
     for i=1, numberofcollisions do
       local collision = collisions[i]
-      if collision.other == endbox then 
-        player.x = 0
-        player.y = 0
+      if collision.other == endbox then
+        world:update(player, (2*32), (14*32))
+        player.x = 2*32
+        player.y = 14*32
       end
     end
 end
