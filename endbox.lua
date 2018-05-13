@@ -1,5 +1,5 @@
 -- End box
-local endBox = {x=9 * 32, y=9 * 32, w=32, h=32}
+local endBox = {x=20*32, y=2*32, w=32, h=32}
 
 local function drawBox(endBox, r,g,b)
   love.graphics.setColor(r,g,b)

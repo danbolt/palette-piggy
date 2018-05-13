@@ -1,7 +1,6 @@
 -- 2D Collision-detection library
 local bump = require 'lib.bump'
 local Camera = require 'lib.Camera'
-require "lib.scene"
 
 local endbox = require 'endbox'
 local mapdata = require 'mapdata'
@@ -9,7 +8,6 @@ local player = require 'player'
 local world = bump.newWorld()
 local currentMap = 'red' 
 local currentWalls = {}
-local FIRST_SCENE = "main"
 
 -- image data
 local imageData = { redSquare = nil }
@@ -93,7 +91,6 @@ function love.load(arg)
   camera:setDeadzone(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 0)
   camera:setFollowLerp(0.2)
   
-  Scene.load(FIRST_SCENE)
   
   world:add(player, player.x, player.y, player.w, player.h)
   world:add(endbox, endbox.x, endbox.y, endbox.w, endbox.h)
