@@ -1,3 +1,6 @@
+
+local gamepad = require 'gamepad'
+
 local function drawBox(box, r,g,b)
   love.graphics.setColor(r,g,b)
   love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
@@ -10,14 +13,14 @@ local function initializePlayer()
   
   function player.updatePlayer(dt)
     local dx, dy = 0, 0
-    if love.keyboard.isDown('right') then
+    if gamepad.isRightDown() then
       dx = speed * dt
-    elseif love.keyboard.isDown('left') then
+    elseif gamepad.isLeftDown() then
       dx = -speed * dt
     end
-    if love.keyboard.isDown('down') then
+    if gamepad.isDownDown() then 
       dy = speed * dt
-    elseif love.keyboard.isDown('up') then
+    elseif gamepad.isUpDown() then
       dy = -speed * dt
     end
     return dx, dy
