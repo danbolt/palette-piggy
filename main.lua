@@ -1,6 +1,7 @@
 Gamestate = require "lib.gamestate"
 
-local levels = require "levellogic"
+local menu = require "scenes.menu"
+
 
 
 
@@ -9,7 +10,7 @@ function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end
   
   Gamestate.registerEvents()
-  Gamestate.switch(levels)
+  Gamestate.switch(menu)
 end
 
 
