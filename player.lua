@@ -1,3 +1,5 @@
+Gamestate = require "lib.gamestate"
+
 local function drawBox(box, r,g,b)
   love.graphics.setColor(r,g,b)
   love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
@@ -10,6 +12,7 @@ local function initializePlayer()
   
   function player.updatePlayer(dt)
     local dx, dy = 0, 0
+  
     if love.keyboard.isDown('right') then
       dx = speed * dt
     elseif love.keyboard.isDown('left') then
@@ -19,8 +22,9 @@ local function initializePlayer()
       dy = speed * dt
     elseif love.keyboard.isDown('up') then
       dy = -speed * dt
-    end
+    end --]]
     return dx, dy
+    
   end
     
   function player.drawPlayer()
@@ -31,18 +35,3 @@ local function initializePlayer()
 end
 
 return initializePlayer()
-
---[[
-  
-  deltaX, deltaY, collisions, numberofcollisions = world:move(player, player.x + dx, player.y + dy)
-  player.x = deltaX
-  player.y = deltaY 
-  for i=1, numberofcollisions do
-    local collision = collisions[i]
-    if collision.other == endbox then 
-      player.x = 0
-      player.y = 0
-    end
-  end
-end
---]]
