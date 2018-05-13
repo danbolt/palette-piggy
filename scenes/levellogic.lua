@@ -95,9 +95,13 @@ function levelLogic:enter()
   imageData.greenSquare = love.graphics.newImage('asset/img/square_green.png')
   imageData.yellowSquare = love.graphics.newImage('asset/img/square_yellow.png')
   
+  imageData.piggySheet = love.graphics.newImage('asset/img/piggysheet.png')
+  
   camera = Camera()
   camera:setDeadzone(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 0)
   camera:setFollowLerp(0.2)
+  
+  player.spriteSheet = imageData.piggySheet
   
   mapdata.loadLevel(levels[currentLevel])
   
