@@ -7,6 +7,8 @@ local world = bump.newWorld()
 
 local endbox = require 'endbox'
 
+local gamepad = require 'gamepad'
+
 local currentMap = 'red' 
 local currentWalls = {}
 
@@ -91,14 +93,14 @@ local function updatePlayer(dt)
   local speed = player.speed
   
   local dx, dy = 0, 0
-  if love.keyboard.isDown('right') then
+  if gamepad.isRightDown() then
     dx = speed * dt
-  elseif love.keyboard.isDown('left') then
+  elseif gamepad.isLeftDown() then
     dx = -speed * dt
   end
-  if love.keyboard.isDown('down') then
+  if gamepad.isDownDown() then 
     dy = speed * dt
-  elseif love.keyboard.isDown('up') then
+  elseif gamepad.isUpDown() then
     dy = -speed * dt
   end
   
