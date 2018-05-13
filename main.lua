@@ -140,6 +140,8 @@ function love.load(arg)
   imageData.blueSquare = love.graphics.newImage('asset/img/square_blue.png')
   imageData.greenSquare = love.graphics.newImage('asset/img/square_green.png')
   imageData.yellowSquare = love.graphics.newImage('asset/img/square_yellow.png')
+  
+  mapdata.loadLevel('level1')
 end
 
 function love.update(dt)
