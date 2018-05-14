@@ -18,7 +18,7 @@
          "name":"yellow",
          "opacity":0.75,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":20,
          "x":0,
          "y":0
@@ -29,7 +29,7 @@
          "name":"blue",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":20,
          "x":0,
          "y":0
