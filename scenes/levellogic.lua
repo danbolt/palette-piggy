@@ -192,10 +192,10 @@ end
 
 function levelLogic:keypressed(key)
   if key == "space" then
-    playerTopLeft = isInWall(nextMap(currentMap), player.x - 0.5, player.y + 0.5)
-    playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w) + 0.5, player.y + 0.5)
-    playerBottomLeft = isInWall(nextMap(currentMap), player.x - 0.5, (player.y + player.h) - 0.5)
-    playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w) + 0.5, (player.y + player.h) - 0.5)
+    playerTopLeft = isInWall(nextMap(currentMap), player.x + 0.5, player.y + 0.5)
+    playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w) - 0.5, player.y + 0.5)
+    playerBottomLeft = isInWall(nextMap(currentMap), player.x + 0.5, (player.y + player.h) - 0.5)
+    playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w) - 0.5, (player.y + player.h) - 0.5)
     if not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
       switchMap()
     else
