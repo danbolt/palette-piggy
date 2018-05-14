@@ -26,23 +26,33 @@ local imageData = { redSquare = nil }
 
 local function getCurrentColour(currentMap)
   if currentMap == 'red' then
-    return imageData.redSquare
+    return .87058,0.14117,0.41568,1,0,0
   elseif currentMap == 'blue' then
-    return imageData.blueSquare
+    return 0.25490,0.65882,0.97254,0,0,1
   elseif currentMap == 'yellow' then
-    return imageData.yellowSquare
+    return 0.92549,0.95294,0.2,0,1,1
   elseif currentMap == 'green' then
-    return imageData.greenSquare
+    return 0.39215,0.80392,0.44313,0,1,0
   end
 end
 
-local function renderMap(currentMap)
+local function renderMap(currentMap,nextMap)
+  r,g,b,r2,g2,b2 = getCurrentColour(currentMap)
+    for mapx=1,mapdata.getMapWidth(nextMap) do
+    for mapy=1,mapdata.getMapHeight(nextMap) do
+     local tile = mapdata.getTileAt(nextMap, mapx, mapy)
+      if tile == true then
+        love.graphics.setColor(r2,g2,b2,1)
+        love.graphics.rectangle("fill", mapx*32, mapy*32,32,32)
+      end
+     end
+   end  
   for mapx=1,mapdata.getMapWidth(currentMap) do
     for mapy=1,mapdata.getMapHeight(currentMap) do
      local tile = mapdata.getTileAt(currentMap, mapx, mapy)
       if tile == true then
-        currentColour = getCurrentColour(currentMap)
-        love.graphics.draw(currentColour, mapx * 32, mapy * 32) 
+        love.graphics.setColor(r,g,b,1)
+        love.graphics.rectangle("fill", mapx*32, mapy*32,32,32) 
       end
      end
    end
@@ -167,17 +177,10 @@ function levelLogic:update(dt)
 end
 
 function levelLogic:draw()
-  love.graphics.push()
-  
-  local offset = love.math.newTransform()
-  offset:translate(-32, -32)
-  love.graphics.applyTransform(offset)
   
   camera:attach()
-  love.graphics.setColor(0.1,0.1,0.1)
-  renderMap(nextMap(currentMap))
+  renderMap(currentMap, nextMap(currentMap))
   love.graphics.setColor(1,1,1)
-  renderMap(currentMap)   
   player.drawPlayer()
   endbox.draw()
   love.graphics.setColor(255, 0, 0, text.alp)
@@ -185,7 +188,6 @@ function levelLogic:draw()
   
   camera:detach()
   
-  love.graphics.pop()
 end
 
 function levelLogic:keypressed(key)
