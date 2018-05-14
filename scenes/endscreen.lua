@@ -27,4 +27,11 @@ function endScreen:keyreleased(key, code)
     end
 end
 
+
+function endScreen:joystickreleased( joystick, button )
+  if button == 1 or button == 8 then
+    Gamestate.switch(endScreen.menu)
+  end
+end
+
 return endScreen

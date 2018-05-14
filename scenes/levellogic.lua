@@ -210,21 +210,32 @@ function levelLogic:draw()
   
 end
 
+
+local function tryToSwitchMap()
+  playerTopLeft = isInWall(nextMap(currentMap), player.x + 0.5, player.y + 0.5)
+  playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w) - 0.5, player.y + 0.5)
+  playerBottomLeft = isInWall(nextMap(currentMap), player.x + 0.5, (player.y + player.h) - 0.5)
+  playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w) - 0.5, (player.y + player.h) - 0.5)
+  if not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
+    switchMap()
+  else
+    camera:shake(3.5, 1, 60)
+    if currentLevel == 1 then
+      t = tween.new(2, text, {alp=1}, 'linear')
+      text.fadeIn = true
+    end      
+  end
+end
+
 function levelLogic:keypressed(key)
   if key == "space" then
-    playerTopLeft = isInWall(nextMap(currentMap), player.x + 0.5, player.y + 0.5)
-    playerTopRight = isInWall(nextMap(currentMap), (player.x + player.w) - 0.5, player.y + 0.5)
-    playerBottomLeft = isInWall(nextMap(currentMap), player.x + 0.5, (player.y + player.h) - 0.5)
-    playerBottomRight = isInWall(nextMap(currentMap), (player.x + player.w) - 0.5, (player.y + player.h) - 0.5)
-    if not (playerTopLeft or playerTopRight or playerBottomLeft or playerBottomRight) then
-      switchMap()
-    else
-      camera:shake(3.5, 1, 60)
-      if currentLevel == 1 then
-        t = tween.new(2, text, {alp=1}, 'linear')
-        text.fadeIn = true
-      end      
-    end
+    tryToSwitchMap()
+  end
+end
+
+function levelLogic:joystickpressed( joystick, button )
+  if button == 1 then
+    tryToSwitchMap()
   end
 end
 

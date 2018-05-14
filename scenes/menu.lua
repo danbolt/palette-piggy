@@ -56,9 +56,16 @@ function menu:draw()
 end
 
 function menu:keyreleased(key, code)
-    if key == 'return' then
-        Gamestate.switch(levels)
-    end
+  if key == 'return' then
+      Gamestate.switch(levels)
+  end
+end
+
+
+function menu:joystickreleased( joystick, button )
+  if button == 1 or button == 8 then
+    Gamestate.switch(levels)
+  end
 end
 
 return menu
