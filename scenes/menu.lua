@@ -19,7 +19,7 @@ function menu:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(title,72,0,0,.8)
     love.graphics.setColor(0.51372,0.94509,0.86666)
-    love.graphics.print("Press Enter", love.graphics.getWidth() / 2, love.graphics.getHeight() * 0.65, 0, 1, 1, 128)
+    love.graphics.print("Press Enter", math.floor(love.graphics.getWidth() / 2), math.floor(love.graphics.getHeight() * 0.65), 0, 1, 1, 128)
     
 end
 
