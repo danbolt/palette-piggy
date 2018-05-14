@@ -26,19 +26,20 @@ local imageData = { redSquare = nil }
 
 local function getCurrentColour(currentMap)
   if currentMap == 'red' then
-    return .87058,0.14117,0.41568,1,0,0
+    return 0.87058,0.14117,0.41568,1,0,0
   elseif currentMap == 'blue' then
     return 0.25490,0.65882,0.97254,0,0,1
   elseif currentMap == 'yellow' then
     return 0.92549,0.95294,0.2,0,1,1
   elseif currentMap == 'green' then
-    return 0.39215,0.80392,0.44313,0,1,0
+    return 0.51372,0.97843,0.76666,0,1,0
   end
 end
 
 local function renderMap(currentMap,nextMap)
+  love.graphics.setColor(1,1,1,1)
   r,g,b,r2,g2,b2 = getCurrentColour(currentMap)
-    for mapx=1,mapdata.getMapWidth(nextMap) do
+  for mapx=1,mapdata.getMapWidth(nextMap) do
     for mapy=1,mapdata.getMapHeight(nextMap) do
      local tile = mapdata.getTileAt(nextMap, mapx, mapy)
       if tile == true then
