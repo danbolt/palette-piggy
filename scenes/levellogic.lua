@@ -11,6 +11,7 @@ local player = require 'player'
 local world = nil
 local currentMap = 'red' 
 local currentWalls = {}
+local font = love.graphics.newFont("asset/fonts/Sniglet-Regular.ttf", 35)
 
 local levelLogic = {}
 local levels = { 'tutorial', 'level1' }
@@ -129,6 +130,8 @@ function levelLogic:enter()
   src:setLooping(true)
   src:play()
   
+  love.graphics.setFont(font)
+  
   camera = Camera()
   camera:setDeadzone(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 0)
   camera:setFollowLerp(0.2)
@@ -138,7 +141,8 @@ function levelLogic:enter()
   mapdata.loadLevel(levels[currentLevel])
   
   world = bump.newWorld()
-  
+  local wallOfDeath = {x=0,y=0,w=32,h=32*15}
+  world:add(wallOfDeath, wallOfDeath.x, wallOfDeath.y, wallOfDeath.w, wallOfDeath.h)
   world:add(player, player.x, player.y, player.w, player.h)
   world:add(endbox, endbox.x, endbox.y, endbox.w, endbox.h)
   addWalls()
@@ -185,7 +189,7 @@ function levelLogic:update(dt)
     if t ~= nil then
       local completed = t:update(dt)
       if completed and text.fadeIn then
-        t = tween.new(2, text, {alp=0}, 'linear')
+        t = tween.new(1, text, {alp=0}, 'linear')
         text.fadeIn = false
       end
     end    
@@ -198,8 +202,9 @@ function levelLogic:draw()
   love.graphics.setColor(1,1,1)
   player.drawPlayer()
   endbox.draw()
-  love.graphics.setColor(255, 0, 0, text.alp)
-  love.graphics.printf("Careful where you walk", text.x, text.y, love.graphics.getWidth(), 'center')
+  love.graphics.setColor(1, 1, 1, text.alp)
+  
+  love.graphics.printf("Careful where you press the spacebar!", text.x, text.y, love.graphics.getWidth(), 'center')
   
   camera:detach()
   
@@ -216,7 +221,7 @@ function levelLogic:keypressed(key)
     else
       camera:shake(3.5, 1, 60)
       if currentLevel == 1 then
-        t = tween.new(4, text, {alp=1}, 'linear')
+        t = tween.new(2, text, {alp=1}, 'linear')
         text.fadeIn = true
       end      
     end

@@ -32,8 +32,8 @@ local function calculateTextOffset()
   local textOffsetX = 0
   local textOffsetY = 0
   if math.abs(math.sin(love.timer.getTime() * 1.3)) > 0.8 then
-    magnitudeX = math.sin(love.timer.getTime() * 20) * 5 + math.sin(love.timer.getTime() * 26) * 3
-    magnitudeY = math.cos(love.timer.getTime() * 24) * 5 + math.cos(love.timer.getTime() * 26) * 3
+    magnitudeX = math.sin(love.timer.getTime() * 20) * 1.2 + math.sin(love.timer.getTime() * 26) * 0.25
+    magnitudeY = math.cos(love.timer.getTime() * 24) * 1.2 + math.cos(love.timer.getTime() * 26) * 0.25
     textOffsetX = math.cos(love.timer.getTime() * 14) * magnitudeX
     textOffsetY = math.sin(love.timer.getTime() * 22) * magnitudeY
   end
