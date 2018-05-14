@@ -14,7 +14,7 @@ local currentWalls = {}
 local font = love.graphics.newFont("asset/fonts/Sniglet-Regular.ttf", 35)
 
 local levelLogic = {}
-local levels = { 'tutorial', 'level1' }
+local levels = { 'tutorial', 'level1', 'level2', 'level3', 'level4' }
 local currentLevel = 1
 
 local src = love.audio.newSource('asset/bgm/roots.mp3', 'stream')
