@@ -167,6 +167,12 @@ function levelLogic:update(dt)
 end
 
 function levelLogic:draw()
+  love.graphics.push()
+  
+  local offset = love.math.newTransform()
+  offset:translate(-32, -32)
+  love.graphics.applyTransform(offset)
+  
   camera:attach()
   love.graphics.setColor(0.1,0.1,0.1)
   renderMap(nextMap(currentMap))
@@ -178,6 +184,8 @@ function levelLogic:draw()
   love.graphics.printf("Careful where you walk", text.x, text.y, love.graphics.getWidth(), 'center')
   
   camera:detach()
+  
+  love.graphics.pop()
 end
 
 function levelLogic:keypressed(key)
