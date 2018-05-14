@@ -1,6 +1,7 @@
 -- 2D Collision-detection library
 local bump = require 'lib.bump'
 local Camera = require 'lib.Camera'
+local tween = require 'lib.tween'
 local Gamestate = require 'lib.gamestate'
 local endscreen = require 'scenes.endscreen'
 
@@ -12,9 +13,13 @@ local currentMap = 'red'
 local currentWalls = {}
 
 local levelLogic = {}
-
 local levels = { 'tutorial', 'level1' }
 local currentLevel = 1
+
+local src = love.audio.newSource('asset/bgm/roots.mp3', 'stream')
+
+local t = nil
+local text = {x = 0, y = 0, alp = 0, fadeIn = false}
 
 -- image data
 local imageData = { redSquare = nil }
@@ -96,6 +101,8 @@ function levelLogic:enter()
   imageData.yellowSquare = love.graphics.newImage('asset/img/square_yellow.png')
   
   imageData.piggySheet = love.graphics.newImage('asset/img/piggysheet.png')
+  src:setLooping(true)
+  src:play()
   
   camera = Camera()
   camera:setDeadzone(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 0)
@@ -121,6 +128,8 @@ local function nextLevel()
        
   currentLevel = currentLevel + 1
   if currentLevel > #levels then
+    src:stop()
+    currentLevel = 1    
     Gamestate.switch(endscreen)
   else
     Gamestate.switch(levelLogic)
@@ -148,8 +157,13 @@ function levelLogic:update(dt)
     camera:follow(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
     
     checkCollisions(dx,dy)
-    
-    
+    if t ~= nil then
+      local completed = t:update(dt)
+      if completed and text.fadeIn then
+        t = tween.new(2, text, {alp=0}, 'linear')
+        text.fadeIn = false
+      end
+    end    
 end
 
 function levelLogic:draw()
@@ -160,6 +174,9 @@ function levelLogic:draw()
   renderMap(currentMap)   
   player.drawPlayer()
   endbox.draw()
+  love.graphics.setColor(255, 0, 0, text.alp)
+  love.graphics.print("Spooky Kabooki.", text.x, text.y)
+  
   camera:detach()
 end
 
@@ -173,10 +190,12 @@ function levelLogic:keypressed(key)
       switchMap()
     else
       camera:shake(3.5, 1, 60)
+      if currentLevel == 1 then
+        t = tween.new(4, text, {alp=1}, 'linear')
+        text.fadeIn = true
+      end      
     end
   end
-  --if --current level is tutorial then
-  --make text appear
 end
 
 return levelLogic

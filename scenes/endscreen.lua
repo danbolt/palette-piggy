@@ -1,5 +1,3 @@
---local menu = require "scenes.menu"
-
 local endScreen = {menu = nil}
 
 function endScreen:draw()
