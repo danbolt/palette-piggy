@@ -26,19 +26,32 @@ local imageData = { redSquare = nil }
 
 local function getCurrentColour(currentMap)
   if currentMap == 'red' then
-    return 0.87058,0.14117,0.41568,1,0,0
+    return 0.87058,0.14117,0.41568,0.89411,0.28235,0.50980
   elseif currentMap == 'blue' then
-    return 0.25490,0.65882,0.97254,0,0,1
+    return 0.24705,0.68235,0.98823,0.57647,0.82352,1
   elseif currentMap == 'yellow' then
-    return 0.92549,0.95294,0.2,0,1,1
+    return 0.59215,0.34509,0.76078,0.72156,0.50980,0.86666
   elseif currentMap == 'green' then
-    return 0.51372,0.97843,0.76666,0,1,0
+    return 0.22745,0.96078,0.62745,0.41960,0.97254,0.71764
+  end
+end
+
+local function getCurrentBackgroundColour(currentMap)
+  if currentMap == 'red' then
+    return 1,0.62745,0.62745
+  elseif currentMap == 'blue' then
+    return 0.77254,0.90588,1
+  elseif currentMap == 'yellow' then
+    return 0.78431,0.60392,0.90588
+  elseif currentMap == 'green' then
+    return 0.61176,0.98431,0.81568
   end
 end
 
 local function renderMap(currentMap,nextMap)
   love.graphics.setColor(1,1,1,1)
   r,g,b,r2,g2,b2 = getCurrentColour(currentMap)
+  rb, gb, bb = getCurrentBackgroundColour(currentMap)
   for mapx=1,mapdata.getMapWidth(nextMap) do
     for mapy=1,mapdata.getMapHeight(nextMap) do
      local tile = mapdata.getTileAt(nextMap, mapx, mapy)
@@ -52,6 +65,7 @@ local function renderMap(currentMap,nextMap)
     for mapy=1,mapdata.getMapHeight(currentMap) do
      local tile = mapdata.getTileAt(currentMap, mapx, mapy)
       if tile == true then
+        love.graphics.setBackgroundColor(rb,gb,bb)
         love.graphics.setColor(r,g,b,1)
         love.graphics.rectangle("fill", mapx*32, mapy*32,32,32) 
       end
