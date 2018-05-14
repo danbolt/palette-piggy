@@ -9,7 +9,7 @@ local function drawBox(box, r,g,b)
 end
 
 local function initializePlayer()
-  local player = {x=(2*32), y=(14*32), w=20, h=20, speed=80, spriteSheet = nil, animations = nil, currentAnimation = nil, facingRight = true}
+  local player = {x=(2*32), y=(14*32), w=20, h=20, speed=80, spriteSheet = nil, animations = nil, currentAnimation = nil, facing = 'down'}
   local speed = player.speed
   
   function player.initializeAnimations()
@@ -24,23 +24,23 @@ local function initializePlayer()
     local grid = anim8.newGrid(128, 128, imageWidth, imageHeight)
     player.animations['idle_right'] = anim8.newAnimation(grid('1-1', 1), 0.15)
     player.animations['walk_right'] = anim8.newAnimation(grid('2-3', 1), 0.15)
-    player.animations['walk_left'] = anim8.newAnimation(grid('2-3', 2), 0.15)
     player.animations['idle_left'] = anim8.newAnimation(grid('1-1', 2), 0.15)
+    player.animations['walk_left'] = anim8.newAnimation(grid('2-3', 2), 0.15)
+    player.animations['idle_down'] = anim8.newAnimation(grid('1-1', 3), 0.15)
+    player.animations['walk_down'] = anim8.newAnimation(grid('2-3', 3), 0.15)
+    player.animations['idle_up'] = anim8.newAnimation(grid('1-1', 4), 0.15)
+    player.animations['walk_up'] = anim8.newAnimation(grid('2-3', 4), 0.15)
     
     player.currentAnimation = 'idle_right'
   end
   
   function player.updateAnimationState(dx, dy)
     local animationType = 'idle'
-    local animationDirection = 'right'
     if dx ~= 0 or dy ~= 0 then
       animationType = 'walk'
     end
-    if player.facingRight == false then
-      animationDirection = 'left'
-    end
     
-    player.currentAnimation = animationType .. '_' .. animationDirection
+    player.currentAnimation = animationType .. '_' .. player.facing
   end
   
   function player.updatePlayer(dt)
@@ -54,16 +54,20 @@ local function initializePlayer()
     if gamepad.isRightDown() then
       dx = speed * dt
       
-      player.facingRight = true
+      player.facing = 'right'
     elseif gamepad.isLeftDown() then
       dx = -speed * dt
       
-      player.facingRight = false
+      player.facing = 'left'
     end
     if gamepad.isDownDown() then 
       dy = speed * dt
+      
+      player.facing = 'down'
     elseif gamepad.isUpDown() then
       dy = -speed * dt
+      
+      player.facing = 'up'
     end
     
     player.updateAnimationState(dx, dy)
