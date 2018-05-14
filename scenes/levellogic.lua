@@ -19,7 +19,7 @@ local currentLevel = 1
 local src = love.audio.newSource('asset/bgm/roots.mp3', 'stream')
 
 local t = nil
-local text = {x = 0, y = 0, alp = 0, fadeIn = false}
+local text = {x = 0, y = 7 * 32, alp = 0, fadeIn = false}
 
 -- image data
 local imageData = { redSquare = nil }
@@ -175,7 +175,7 @@ function levelLogic:draw()
   player.drawPlayer()
   endbox.draw()
   love.graphics.setColor(255, 0, 0, text.alp)
-  love.graphics.print("Spooky Kabooki.", text.x, text.y)
+  love.graphics.printf("Careful where you walk", text.x, text.y, love.graphics.getWidth(), 'center')
   
   camera:detach()
 end

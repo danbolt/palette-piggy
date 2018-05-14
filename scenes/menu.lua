@@ -3,7 +3,7 @@ local endscreen = require "scenes.endscreen"
 
 local menu = {}
 
-font = love.graphics.newFont("asset/fonts/Sniglet-Regular.ttf", 150)
+font = love.graphics.newFont("asset/fonts/Sniglet-Regular.ttf", 75)
 
 
 endscreen.menu = menu
