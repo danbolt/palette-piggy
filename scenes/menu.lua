@@ -50,7 +50,7 @@ function menu:draw()
   love.graphics.setBackgroundColor(1,0.62745098039,0.62745098039)
   love.graphics.setColor(1,1,1,1)
   love.graphics.draw(title,72,64,0,.8)
-  love.graphics.setColor(0.51372,0.94509,0.86666)
+  love.graphics.setColor(0.41960,0.97254,0.71764)
   love.graphics.print("Press Enter", math.floor(love.graphics.getWidth() / 2 + offsetX), math.floor(love.graphics.getHeight() * 0.65 + offsetY + 32), 0, 1, 1, 128)
     
 end
