@@ -17,7 +17,7 @@ local levelLogic = {}
 local levels = { 'tutorial', 'level1', 'level2', 'level3', 'level4' }
 local currentLevel = 1
 
-local src = love.audio.newSource('asset/bgm/roots.mp3', 'stream')
+local src = love.audio.newSource('asset/bgm/roots.mp3', 'static')
 
 local t = nil
 local text = {x = 0, y = 7 * 32, alp = 0, fadeIn = false}
